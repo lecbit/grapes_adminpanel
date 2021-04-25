@@ -15,7 +15,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Category::orderBy('created_at', 'desc')->get();
+        return view('admin.category.index',[
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -25,7 +28,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.category.create');
     }
 
     /**
@@ -36,7 +39,11 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $new_category = new Category();
+        $new_category->title = $request->title;
+        $new_category->save();
+
+        return redirect()->back()->withSuccess('Категория была успешно добавлена!');
     }
 
     /**
@@ -58,7 +65,9 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view('admin.category.edit',[
+            'category' => $category
+        ]);
     }
 
     /**
@@ -70,7 +79,9 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $category->title = $request->title;
+        $category->save();
+        return redirect()->back()->withSuccess('Категория была успешно обновлена!');
     }
 
     /**
@@ -81,6 +92,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+        return redirect()->back()->withSuccess('Категория была успешно удалена!');
     }
 }
